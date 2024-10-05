@@ -15,16 +15,31 @@ st.image(image, width=700, use_column_width=True)
 # Integrantes
 st.header("Nuestro Equipo")
 
-col1, col2 = st.columns(2)
+col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
-    st.write("**[Nombre del Integrante 1]**")
+    st.write("**[Juan Carlos Garcia]**")
     st.write("[Rol en el proyecto]")
 
 with col2:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
-    st.write("**[Nombre del Integrante 2]**")
+    st.write("**[Juan Camilo Hernandez]**")
+    st.write("[Rol en el proyecto]")
+    
+with col3:
+    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.write("**[Nombre del Integrante 3]**")
+    st.write("[Rol en el proyecto]")
+    
+with col4:
+    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.write("**[Nombre del Integrante 4]**")
+    st.write("[Rol en el proyecto]")
+    
+with col5:
+    st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
+    st.write("**[Nombre del Integrante 5]**")
     st.write("[Rol en el proyecto]")
 
 # Descripción del proyecto
