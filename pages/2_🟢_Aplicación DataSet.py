@@ -4,13 +4,13 @@ import pandas as pd
 st.set_page_config(layout="wide")
 
 st.subheader("Análisis y Filtrado de Datos")
-
-df = pd.read_csv('./static/datasets/ventas.csv')
+Lugares_deportivos = pd.read_csv('./static/datasets/Lugares_deportivos.csv')
+df = pd.read_csv('./static/datasets/Lugares_deportivos.csv')
 
 
 tad_descripcion, tab_Análisis_Exploratorio, tab_Filtrado_Básico, tab_Filtro_Final_Dinámico = st.tabs(["Descripción", "Análisis Exploratorio", "Filtrado Básico", "Filtro Final Dinámico"])
 
-#----------------------------------------------------------
+#----------------- -----------------------------------------
 #Generador de datos
 #----------------------------------------------------------
 with tad_descripcion:      
@@ -52,7 +52,14 @@ with tab_Análisis_Exploratorio:
     * Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada. **(df['columna_categorica'].value_counts())** 
     * Otra información importante           
     """)   
-    
+    st.dataframe(df.head(5))
+    st.dataframe(df.shape)
+    st.dataframe(df.dtypes)
+    nulos_por_columna = df.isnull().sum()
+    st.dataframe(nulos_por_columna[nulos_por_columna > 0])
+    st.dataframe(df.describe())
+    st.dataframe(df['barrio'].value_counts())
+   
 #----------------------------------------------------------
 #Analítica 2
 #----------------------------------------------------------
