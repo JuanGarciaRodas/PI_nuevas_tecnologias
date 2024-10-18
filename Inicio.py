@@ -34,13 +34,13 @@ with col3:
     
 with col4:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
-    st.write("**[Nombre del Integrante 4]**")
-    st.write("[Rol en el proyecto]")
+    st.write("**[Dayana Castro Villa]**")
+    st.write("[Colaboradora]")
     
 with col5:
     st.image("./static/user.png", width=200)  # Reemplaza con la ruta de la foto
-    st.write("**[Nombre del Integrante 5]**")
-    st.write("[Rol en el proyecto]")
+    st.write("**[Bibiana Machado]**")
+    st.write("[Colaboradora]")
 
 # Descripción del proyecto
 st.header("Sobre el Proyecto")

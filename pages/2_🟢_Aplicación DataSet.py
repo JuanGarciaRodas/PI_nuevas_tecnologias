@@ -102,7 +102,7 @@ with tab_Filtrado_Básico:
         * Permite elegir un operador de comparación (igual, diferente, mayor que, menor que). **(st.radio)**
         * Muestra los datos filtrados en una tabla. **(st.dataframe)** 
         """)
-        st.dataframe(df[df['barrio'] == 'valor'])
+ 
 
 #----------------------------------------------------------
 #Analítica 3
