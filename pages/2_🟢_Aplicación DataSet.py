@@ -1,11 +1,12 @@
 import streamlit as st
 import pandas as pd
 
+
+
 st.set_page_config(layout="wide")
 
 st.subheader("Análisis y Filtrado de Datos")
-Lugares_deportivos = pd.read_csv('./static/datasets/Lugares_deportivos.csv')
-df = pd.read_csv('./static/datasets/Lugares_deportivos.csv')
+
 
 
 tad_descripcion, tab_Análisis_Exploratorio, tab_Filtrado_Básico, tab_Filtro_Final_Dinámico = st.tabs(["Descripción", "Análisis Exploratorio", "Filtrado Básico", "Filtro Final Dinámico"])
@@ -14,7 +15,7 @@ tad_descripcion, tab_Análisis_Exploratorio, tab_Filtrado_Básico, tab_Filtro_Fi
 #Generador de datos
 #----------------------------------------------------------
 with tad_descripcion:      
-
+    
     st.markdown('''
     ## Plantilla Básica para Proyecto Integrador
 
@@ -41,7 +42,8 @@ with tad_descripcion:
 #----------------------------------------------------------
 #Analítica 1
 #----------------------------------------------------------
-with tab_Análisis_Exploratorio:    
+with tab_Análisis_Exploratorio: 
+    st.tabs(["Análisis Exploratorio"])
     st.title("Análisis Exploratorio")
     st.markdown("""
     * Muestra las primeras 5 filas del DataFrame.  **(df.head())**
@@ -52,43 +54,72 @@ with tab_Análisis_Exploratorio:
     * Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada. **(df['columna_categorica'].value_counts())** 
     * Otra información importante           
     """)   
-    
-def analisis_exploratorio(df):   
- df = pd.read_csv('./static/datasets/Lugares_deportivos.csv')
+def mostrar_resultados(df, consulta):
+    """Muestra los resultados de la consulta seleccionada.
 
- # Selector multi-select para que el usuario elija las consultas
-consultas_seleccionadas = st.multiselect('Selecciona las consultas que quieres realizar:', [
-    "Muestra las primeras 5 filas",
-    "Muestra la cantidad de filas y columnas",
-    "Muestra los tipos de datos",
-    "Identifica y muestra las columnas con valores nulos",
-    "Muestra un resumen estadístico",
-    "Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada"
-])
-
-# Ejecutar las consultas seleccionadas
-if consultas_seleccionadas:
-    for consulta in consultas_seleccionadas:
-        if consulta == "Muestra las primeras 5 filas":
-            st.dataframe(df.head(5))
-        elif consulta == "Muestra la cantidad de filas y columnas":
-            st.write(f"El DataFrame tiene {df.shape[0]} filas y {df.shape[1]} columnas.")
-        elif consulta == "Muestra los tipos de datos":
-            st.dataframe(df.dtypes)
-        elif consulta == "Identifica y muestra las columnas con valores nulos":
-            nulos_por_columna = df.isnull().sum()
-            st.dataframe(nulos_por_columna[nulos_por_columna > 0])
-        elif consulta == "Muestra un resumen estadístico":
-            st.dataframe(df.describe())
-        elif consulta == "Muestra una tabla con la frecuencia de valores únicos para una columna categórica seleccionada":
-            columna = st.selectbox('Selecciona una columna categórica:', df.select_dtypes(include=['object']).columns)
-            st.dataframe(df[columna].value_counts())
+    Args:
+        df (pd.DataFrame): DataFrame con los datos.
+        consulta (str): Consulta seleccionada por el usuario.
+    """
+    if consulta == 'Mostrar las primeras 5 filas':
+        st.write('Primeras 5 filas:')
+        st.dataframe(df.head())
+    elif consulta == 'Cantidad de filas y columnas':
+        st.write('Dimensiones del DataFrame:')
+        st.write(df.shape)
+    elif consulta == 'Tipos de datos de cada columna':
+        st.write('Tipos de datos:')
+        st.write(df.dtypes)
+    elif consulta == 'Mostrar columnas con valores nulos':
+        st.write('Valores nulos por columna:')
+        st.write(df.isnull().sum())
+    elif consulta == 'Resumen estadístico de las columnas numéricas':
+        st.write('Resumen estadístico:')
+        st.write(df.describe())
+    elif consulta == 'Frecuencia de valores únicos para una columna':
+        columna = st.selectbox('Selecciona una columna:', df.columns)
+        if columna in df.select_dtypes(include=['object']).columns:
+            st.write(f"Frecuencia de valores únicos para '{columna}':")
+            st.bar_chart(df[columna].value_counts())
         else:
-            st.write("Opción no válida")
-else:
-    st.write("Selecciona al menos una consulta")
+            st.warning(f"La columna '{columna}' no es categórica.")
+    elif consulta == 'Visualizar distribución de una variable numérica':
+        columna = st.selectbox('Selecciona una columna numérica:', df.select_dtypes(include=['number']).columns)
+        fig, ax = plt.subplots()
+        sns.histplot(data=df, x=columna, kde=True)
+        st.pyplot(fig)
+
+# Lista de opciones para el selectbox
+consultas_seleccionadas = [
+    "Selecciona una consulta",  # Opción predeterminada
+    "Mostrar las primeras 5 filas",
+    "Cantidad de filas y columnas",
+    "Tipos de datos de cada columna",
+    "Mostrar columnas con valores nulos",
+    "Resumen estadístico de las columnas numéricas",
+    "Frecuencia de valores únicos para una columna",
+    "Visualizar distribución de una variable numérica"
+]
+
+# Crear el selectbox para elegir una opción
+consulta = st.selectbox('Selecciona una consulta:', consultas_seleccionadas)
+
+# Cargar el DataFrame con manejo de errores
+try:
+    df = pd.read_csv('./static/datasets/DataGYM.csv', sep=';')  # Usar el separador adecuado
     
- 
+    # Solo mostrar resultados si el usuario selecciona una opción válida
+    if consulta != "Selecciona una consulta":
+        mostrar_resultados(df, consulta)
+    else:
+        st.write("Por favor, selecciona una consulta para ver los resultados.")
+except FileNotFoundError:
+    st.error("El archivo CSV no fue encontrado. Verifica la ruta.")
+except pd.errors.EmptyDataError:
+    st.error("El archivo CSV está vacío.")
+except Exception as e:
+    st.error(f"Ha ocurrido un error: {e}")
+
 
 
 #----------------------------------------------------------
